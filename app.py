@@ -4,12 +4,18 @@ import asyncio
 import logging
 from flask import Flask, jsonify
 from nissei import Nissei
+import logfire
+
 
 # Configuración de logging
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
 )
+
+logfire.configure(token='pylf_v1_us_vgCM05Ppc7t55MQKpWWhqp8CQh8mPTr6D7qmY6tNTvnd')
+logfire.configure()
+
 
 app = Flask(__name__)
 
