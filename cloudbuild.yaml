@@ -36,3 +36,5 @@ steps:
       - "2Gi"
       - "--cpu"
       - "2"
+      - "--concurrency"
+      - "1"
