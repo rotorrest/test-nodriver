@@ -21,7 +21,10 @@ def run_scraper():
         page = await browser.get(url)
         await asyncio.sleep(2)  # Esta función necesita asyncio
         response = await page.get_content()
-
+        await asyncio.sleep(0.1)  # Espera para asegurarse de que el contenido se cargue correctamente
+        await browser.stop()
+        await asyncio.sleep(0.1)  # Espera para asegurarse de que el navegador se detenga correctamente
+        
         nissei = Nissei(response)
         await nissei.scraping()
 
