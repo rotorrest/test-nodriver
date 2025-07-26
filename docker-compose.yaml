@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  nissei-scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nissei-scraper
+    ports:
+      - "80:80"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    platform: linux/amd64
