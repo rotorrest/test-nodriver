@@ -1,6 +1,5 @@
 options:
-  # Desactiva el logging si no quieres buckets de logs
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
 
 steps:
   # 1. Construir la imagen Docker
