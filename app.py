@@ -13,6 +13,8 @@ def run_scraper():
         browser = await nodriver.start(
             headless=True,
             lang="es-ES",
+            no_sandbox=True,
+            disable_gpu=True,
         )
 
         page = await browser.get(url)
