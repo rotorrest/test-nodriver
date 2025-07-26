@@ -16,25 +16,22 @@ steps:
       - push
       - gcr.io/$PROJECT_ID/pl-nodriver
 
-  # 3. Desplegar en Cloud Run
+  # 3. Desplegar en múltiples regiones de Cloud Run (una por una)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+    entrypoint: bash
     args:
-      - run
-      - deploy
-      - pl-nodriver
-      - --image
-      - gcr.io/$PROJECT_ID/pl-nodriver
-      - --region
-      - us-central1
-      - --platform
-      - managed
-      - --allow-unauthenticated
-      - --port
-      - "80"
-      - "--memory"
-      - "2Gi"
-      - "--cpu"
-      - "2"
-      - "--concurrency"
-      - "1"
+      - -c
+      - |
+        REGIONS=("us-central1" "us-east1" "us-west1" "us-east4")
+        for REGION in "${REGIONS[@]}"; do
+          echo "Desplegando en $REGION..."
+          gcloud run deploy pl-nodriver \
+            --image gcr.io/$PROJECT_ID/pl-nodriver \
+            --region "$REGION" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 80 \
+            --memory 2Gi \
+            --cpu 2 \
+            --concurrency 1
+        done
