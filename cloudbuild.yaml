@@ -1,5 +1,5 @@
 options:
-  logging: NONE  # No envía logs a Cloud Logging ni crea bucket
+  logging: NONE  # Desactiva logs
 
 timeout: '1200s'
 
@@ -12,35 +12,48 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/pl-nodriver']
 
-  # Deploy to Cloud Run in multiple regions in parallel
+  # Deploy to Cloud Run in us-central1
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: bash
     args:
-      - -c
-      - |
-        REGIONS=(
-          "us-central1"
-          "us-east1"
-          "us-east4"
-          "us-east5"
-          "us-west1"
-          "us-west2"
-          "us-west3"
-          "us-west4"
-          "us-south1"
-        )
+      - run
+      - deploy
+      - pl-nodriver
+      - --image
+      - gcr.io/$PROJECT_ID/pl-nodriver
+      - --region
+      - us-central1
+      - --platform
+      - managed
+      - --allow-unauthenticated
+      - --port
+      - '80'
+      - --concurrency
+      - '1'
+      - --memory
+      - 1Gi
+      - --cpu
+      - '1'
+      - --quiet
 
-        for REGION in "${REGIONS[@]}"; do
-          gcloud run deploy pl-nodriver \
-            --image gcr.io/$PROJECT_ID/pl-nodriver \
-            --region "$REGION" \
-            --platform managed \
-            --allow-unauthenticated \
-            --port 80 \
-            --concurrency 1 \
-            --memory 1Gi \
-            --cpu 1 \
-            --quiet &
-        done
-
-        wait
+  # Deploy to Cloud Run in us-east1
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - run
+      - deploy
+      - pl-nodriver
+      - --image
+      - gcr.io/$PROJECT_ID/pl-nodriver
+      - --region
+      - us-east1
+      - --platform
+      - managed
+      - --allow-unauthenticated
+      - --port
+      - '80'
+      - --concurrency
+      - '1'
+      - --memory
+      - 1Gi
+      - --cpu
+      - '1'
+      - --quiet
