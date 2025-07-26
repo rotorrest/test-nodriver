@@ -1,3 +1,7 @@
+options:
+  # Desactiva el logging (no genera bucket de logs ni envía a Cloud Logging)
+  logging: NONE
+
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -46,5 +50,4 @@ steps:
 
         wait  # Espera a que terminen todos los despliegues
 
-# Tiempo máximo de ejecución para todo el proceso
 timeout: '1200s'
