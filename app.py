@@ -12,6 +12,7 @@ def run_scraper():
     async def main():
         browser = await nodriver.start(
             headless=True,
+            chrome_args=["--no-sandbox", "--disable-dev-shm-usage"],
             lang="es-ES",
             no_sandbox=True,
             disable_gpu=True,
