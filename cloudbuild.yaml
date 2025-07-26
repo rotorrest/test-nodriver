@@ -1,38 +1,33 @@
 options:
-  # Desactiva el logging (no genera bucket de logs ni envía a Cloud Logging)
-  logging: NONE
+  logging: NONE  # No envía logs a Cloud Logging ni crea bucket
+
+timeout: '1200s'
 
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - build
-      - -t
-      - gcr.io/$PROJECT_ID/pl-nodriver
-      - .
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/pl-nodriver', '.']
 
   # Push the Docker image to Google Container Registry (GCR)
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - push
-      - gcr.io/$PROJECT_ID/pl-nodriver
+    args: ['push', 'gcr.io/$PROJECT_ID/pl-nodriver']
 
-  # Deploy to Cloud Run in multiple regions (parallel deployment)
+  # Deploy to Cloud Run in multiple regions in parallel
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: bash
     args:
       - -c
       - |
         REGIONS=(
-          "us-central1"  # Iowa
-          "us-east1"     # South Carolina
-          "us-east4"     # Northern Virginia
-          "us-east5"     # Columbus
-          "us-west1"     # Oregon
-          "us-west2"     # Los Angeles
-          "us-west3"     # Salt Lake City
-          "us-west4"     # Las Vegas
-          "us-south1"    # Dallas
+          "us-central1"
+          "us-east1"
+          "us-east4"
+          "us-east5"
+          "us-west1"
+          "us-west2"
+          "us-west3"
+          "us-west4"
+          "us-south1"
         )
 
         for REGION in "${REGIONS[@]}"; do
@@ -48,6 +43,4 @@ steps:
             --quiet &
         done
 
-        wait  # Espera a que terminen todos los despliegues
-
-timeout: '1200s'
+        wait
