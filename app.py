@@ -21,6 +21,7 @@ def run_scraper():
         try:
             logging.info("Iniciando navegador Nodriver...")
             browser = await nodriver.start(
+                path="/usr/bin/google-chrome",
                 headless=True,
                 chrome_args=["--no-sandbox", "--disable-dev-shm-usage"],
                 lang="es-ES",
